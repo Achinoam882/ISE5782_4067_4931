@@ -45,14 +45,14 @@ public class Point {
         return new Vector(result);
     }
 
-    public double distanceSquared(Double3 other)
+    public double distanceSquared(Point point)
     {
-        return ( (other._d1 - this._xyz._d1) * (other._d1 - this._xyz._d1) +
-                (other._d2 - this._xyz._d2) * (other._d2 - this._xyz._d2) +
-                (other._d3 - this._xyz._d3) * (other._d3 - this._xyz._d3));
+        return ( (_xyz._d1-point._xyz._d1) * (_xyz._d1-point._xyz._d1) +
+                ((_xyz._d2-point._xyz._d2) * (_xyz._d2-point._xyz._d2) +
+                        (_xyz._d3-point._xyz._d3) * (_xyz._d3-point._xyz._d3)));
     }
-    public double distance (Double3 other){
-        return Math.sqrt(distanceSquared(other));
+    public double distance (Point point){
+        return Math.sqrt(distanceSquared(point));
     }
 
 

@@ -118,9 +118,9 @@ public class Vector extends Point {
     public int hashCode() {
         return super.hashCode();
     }
-    public Vector add(Double3 xyz)
+    public Vector add(Vector vector)
     {
-            return  new Vector(_xyz.add(xyz));
+            return  new Vector(_xyz.add(vector._xyz));
     }
     public Vector scale(double scalingFacor)
     {

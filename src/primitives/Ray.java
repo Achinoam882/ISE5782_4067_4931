@@ -1,7 +1,8 @@
 /**
 * Ray class represents a vector with a location point
- * it contains a Vector and a Point3D
- * */
+ * it contains a Vector and a Point
+ *  * @author Achinoam & Malka
+ */
 package primitives;
 
 import java.util.Objects;
