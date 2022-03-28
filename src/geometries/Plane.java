@@ -6,6 +6,11 @@
 package geometries;
 import primitives.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import static primitives.Util.isZero;
+
 public class Plane implements Geometry {
     final private Point _q0;
     final  private Vector _normal;
@@ -42,6 +47,25 @@ public class Plane implements Geometry {
                 throw new IllegalArgumentException("The points are on the same line");
             }
         }
+    @Override
+    public List<Point> findIntsersections(Ray ray) {
+        // In case there are zeroes in denominator and numerator
+        // For example when ray is parallel to the plane
+        if (ray.getP0().equals(_q0) || isZero(this._normal.dotProduct(ray.getDir()))
+                || isZero(this._normal.dotProduct(_q0.subtract(ray.getP0()))))
+            return null;
+
+        double t = (this._normal.dotProduct(_q0.subtract(ray.getP0()))) / (this._normal.dotProduct(ray.getDir()));
+        if (t < 0) // In case there is no intersection with the plane return null
+            return null;
+
+        //In case there is intersection with the plane return the point
+        Point p = ray.getPoint(t);
+        LinkedList<Point> result = new LinkedList<Point>();
+        result.add(p);
+        return result;
+    }
+
 
 
 
@@ -72,4 +96,6 @@ public class Plane implements Geometry {
         return _normal;
     }
     public Vector getNormal() {return _normal;}
+
+
 }

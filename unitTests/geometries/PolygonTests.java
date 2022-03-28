@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import geometries.*;
 import primitives.*;
 
+import java.util.List;
+
 /**
  * Testing Polygons
  * 
@@ -76,4 +78,32 @@ public class PolygonTests {
 		double sqrt3 = Math.sqrt(1d / 3);
 		assertEquals(new Vector(sqrt3, sqrt3, sqrt3), pl.getNormal(new Point(0, 0, 1)), "Bad normal to trinagle");
 	}
+	/*
+	public void testFindIntersections() {
+		Polygon polygon=new Polygon(new Point(1,1,0),new Point(1,-1,0),new Point(-1,-1,0),new Point(-1,1,0));
+
+		// ============ Equivalence Partitions Tests ==============
+
+		// TC01:  Ray intersects the Polygon
+		assertEquals(List.of(new Point(1, 1, 1)),plane.findIntsersections(new Ray(new Point(-1, -1, -1), new Vector(1, 1, 1))),"Ray should intersects the plane");
+
+		List<GeoPoint> result=polygon.findIntsersections(new Ray(new Point(0.5,0.5,-1),new Vector(0,0,1)));
+		assertEquals("Wrong number of points",1, result.size());
+		assertEquals("Wrong ray",new Point(0.5,0.5,0), result.get(0).point);
+
+		// TC02:  Ray does not intersect the Plane that the Polygon is part of
+		assertEquals("Wrong ray's direction",null, polygon.findIntsersections(new Ray(new Point3D(0.5,0.5,-1),new Vector(-1,-1,-1))));
+
+		// TC03:  Ray intersects the Plane but does not intersect the Polygon
+		result=polygon.findIntsersections(new Ray(new Point(0.5,0.5,-1),new Vector(3,5,7)));
+		assertEquals("Wrong ray's direction",null, result);
+
+		// =============== Boundary Values Tests ==================
+
+		// TC04: Ray intersect the polygon's edge (no intersection points)
+		assertEquals("Wrong ray",null,polygon.findIntsersections(new Ray(new Point(-1,-1,-1),new Vector(0,0,1))));
+
+	}
+	*/
+
 }

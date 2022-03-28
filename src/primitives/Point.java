@@ -4,7 +4,6 @@ import java.util.Objects;
 
 public class Point {
     final Double3 _xyz;
-
      Point(Double3 xyz) {
         _xyz = xyz;
     }
@@ -37,13 +36,13 @@ public class Point {
 
     public Vector subtract(Point point) {
         Double3 result = _xyz.subtract(point._xyz);
-
-        if(result.equals(Double3.ZERO)) {
+        if(result.equals((Double3.ZERO))) {
             throw new IllegalArgumentException("resulting of subract: Vector(0,0,0) not allowed");
         }
-
         return new Vector(result);
     }
+
+
 
     public double distanceSquared(Point point)
     {
@@ -55,6 +54,13 @@ public class Point {
         return Math.sqrt(distanceSquared(point));
     }
 
-
-
+    public double get_d1() {
+        return _xyz._d1;
+    }
+    /**public double get_d2() {
+        return _xyz._d2;
+    }
+    public double get_d3() {
+        return _xyz._d3;
+    }*/
 }

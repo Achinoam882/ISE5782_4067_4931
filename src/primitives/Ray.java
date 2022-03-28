@@ -7,6 +7,8 @@ package primitives;
 
 import java.util.Objects;
 
+import static primitives.Util.isZero;
+
 public class Ray {
    final Point p0;
     final Vector dir;
@@ -43,6 +45,13 @@ public class Ray {
                 "p0=" + p0 +
                 ", dir=" + dir +
                 '}';
+    }
+    public Point getPoint(double t) {
+        if (isZero(t)){
+            return p0;
+        }
+        return p0.add(dir.scale(t));
+
     }
 }
 

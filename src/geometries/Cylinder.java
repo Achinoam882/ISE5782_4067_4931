@@ -1,6 +1,8 @@
 package geometries;
 import primitives.*;
 
+import java.util.List;
+
 /**
  *Cylinder class
  * @author Achinoam & Malka
@@ -39,5 +41,9 @@ public class Cylinder extends  Tube {
 
     public double getHeight() {
         return height;
+    }
+    @Override
+    public List<Point> findIntsersections(Ray ray) {
+        return null;
     }
 }

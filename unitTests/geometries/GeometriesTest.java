@@ -1,0 +1,47 @@
+package geometries;
+
+import org.junit.jupiter.api.Test;
+import primitives.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+/**
+ * Composite class to gather other {@link Geometry} based objects
+ */
+class GeometriesTest {
+
+    @Test
+    void testFindIntsersections() {
+        Sphere sph = new Sphere(1,new Point(1, 1, 1));
+        Plane plane = new Plane(new Point(1, 0, 0), new Point(0, 1, 0), new Point(0, 0, 2));
+        Triangle tr = new Triangle(new Point(1,0,0), new Point(0, 1, 0), new Point(0, 0, 1));
+        Geometries collection = new Geometries(sph, plane, tr);
+
+        // ============ Equivalence Partitions Tests ==============
+
+        // TC01: Some of the Geometries are intersected
+        Ray ray = new Ray(new Point(-1, 0, 0), new Vector(1, 1, 1));
+        assertEquals(3, collection.findIntsersections(ray).size()
+                ,"Wrong number of intersection points"); // Intersects only plane and sphere
+
+        // =============== Boundary Values Tests ==================
+
+        // TC11: All the Geometries are intersected
+        ray = new Ray(new Point(2, 2, 2.5), new Vector(-1, -1, -1));
+        assertEquals(4, collection.findIntsersections(ray).size()
+                ,"Wrong number of intersection points");
+
+        // TC12: No Geometries are intersected
+        ray = new Ray(new Point(-1, 0, 0), new Vector(-1, -1, -1));
+        assertNull(collection.findIntsersections(ray),"No intersection points");
+
+        // TC13: Only one Geometry shape is intersected
+        ray = new Ray(new Point(2, 0, 2), new Vector(-1, -1, -1));
+        assertEquals(1, collection.findIntsersections(ray).size()
+                ,"Wrong number of intersection points");  // Intersects only plane
+
+        // TC14: Empty Geometries collection
+        collection = new Geometries();
+        assertNull(collection.findIntsersections(new Ray(new Point(-1, 0, 0),new Vector(1, 1, 0)))
+                ,"No geometry shapes in the collection");
+    }
+}
