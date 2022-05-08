@@ -15,10 +15,9 @@ import java.util.List;
 
 import static primitives.Util.alignZero;
 
-public class Triangle extends Polygon{
-    public Triangle(Point p1, Point p2, Point p3)
-    {
-        super(p1,p2,p3);
+public class Triangle extends Polygon {
+    public Triangle(Point p1, Point p2, Point p3) {
+        super(p1, p2, p3);
     }
 
     @Override
@@ -27,13 +26,16 @@ public class Triangle extends Polygon{
     }
 
     @Override
-    public Vector getNormal(Point p){
+    public Vector getNormal(Point p) {
         return super.getNormal(p);
     }
 
+
+
+
     @Override
-    public List<Point> findIntsersections(Ray ray) {
-        List<Point> resultPoint = plane.findIntsersections(ray);
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        List<GeoPoint> resultPoint = plane.findGeoIntersectionsHelper(ray);
 
         if (resultPoint == null) // In case there is no intersection with the plane return null
             return null;
@@ -50,16 +52,14 @@ public class Triangle extends Polygon{
 
         if (t1 == 0 || t2 == 0 || t3 == 0) // In case one or more of the scalars equals zero
             return null; // that mean the point is not inside the triangle
-
         if ((t1 > 0 && t2 > 0 && t3 > 0) || (t1 < 0 && t2 < 0 && t3 < 0)) { // In case the all scalars are in the same sign, the point is in the triangle
-            LinkedList<Point> result = new LinkedList<Point>();
-            result.add(resultPoint.get(0));
-            return result;
+            LinkedList<GeoPoint> result = new LinkedList<GeoPoint>();
+            result.add(new GeoPoint(this, resultPoint.get(0).point));
             //} else if (t1 < 0 && t2 < 0 && t3 < 0) { // In case the all scalars are in the same sign, the point is in the triangle
             //    LinkedList<Point> result = new LinkedList<Point>();
             //    result.add(resultPoint.get(0));
-            //    return result;
+               return result;
         } else
-            return null;	//If the scalars are in a different sign
+            return null;    //If the scalars are in a different sign
     }
 }

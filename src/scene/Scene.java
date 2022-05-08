@@ -1,9 +1,11 @@
 package scene;
 import geometries.Geometries;
 import lighting.AmbientLight;
+import lighting.LightSource;
 import primitives.Color;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *  Scene or holding all the objects involved
@@ -27,7 +29,9 @@ public class Scene {
      */
     public  Geometries geometries;
 
-        /**
+    public List<LightSource> lights=new LinkedList<>();
+
+    /**
          * ctor: get name and build empty body with color black with the name
          *
          * @param name - name of the scene (the "empty" body)
@@ -68,6 +72,16 @@ public class Scene {
      */
     public Scene setGeometries(Geometries geometries) {
         this.geometries = geometries;
+        return this;
+    }
+    /**
+     * ------------- setter -----------------
+     *
+     * @param lights - list of sources light
+     * @return itself scene
+     */
+    public Scene setLights(List<LightSource> lights) {
+        this.lights = lights;
         return this;
     }
 }

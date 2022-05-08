@@ -53,9 +53,9 @@ public class Vector extends Point {
      * @return euclidean length squared of the vector
      */
     public double lengthSquared() {
-        double u1 = _xyz._d1;
-        double u2 = _xyz._d2;
-        double u3 = _xyz._d3;
+        double u1 = _xyz.d1;
+        double u2 = _xyz.d2;
+        double u3 = _xyz.d3;
 
         return u1 * u1 + u2 * u2 + u3 * u3;
     }
@@ -69,13 +69,13 @@ public class Vector extends Point {
      * @link https://chepusht.mathcs.wilkes.edu/DotVsCrossProducts.pdf
      */
     public double dotProduct(Vector vector) {
-        double u1 = _xyz._d1;
-        double u2 = _xyz._d2;
-        double u3 = _xyz._d3;
+        double u1 = _xyz.d1;
+        double u2 = _xyz.d2;
+        double u3 = _xyz.d3;
 
-        double v1 = vector._xyz._d1;
-        double v2 = vector._xyz._d2;
-        double v3 = vector._xyz._d3;
+        double v1 = vector._xyz.d1;
+        double v2 = vector._xyz.d2;
+        double v3 = vector._xyz.d3;
 
         return (u1 * v1 + u2 * v2 + u3 * v3);
     }
@@ -87,13 +87,13 @@ public class Vector extends Point {
      * @link https://chepusht.mathcs.wilkes.edu/DotVsCrossProducts.pdf
      */
     public Vector crossProduct(Vector vector) {
-        double u1 = _xyz._d1;
-        double u2 = _xyz._d2;
-        double u3 = _xyz._d3;
+        double u1 = _xyz.d1;
+        double u2 = _xyz.d2;
+        double u3 = _xyz.d3;
 
-        double v1 = vector._xyz._d1;
-        double v2 = vector._xyz._d2;
-        double v3 = vector._xyz._d3;
+        double v1 = vector._xyz.d1;
+        double v2 = vector._xyz.d2;
+        double v3 = vector._xyz.d3;
 
         return new Vector((u2*v3-v2*u3),-(u1*v3-v1*u3),(u1*v2-v1*u2));
 
@@ -126,9 +126,9 @@ public class Vector extends Point {
     {
         return new Vector(
                 new Double3(
-                        (scalingFacor * _xyz._d1),
-                        (scalingFacor * _xyz._d2),
-                       (scalingFacor * _xyz._d3)));
+                        (scalingFacor * _xyz.d1),
+                        (scalingFacor * _xyz.d2),
+                       (scalingFacor * _xyz.d3)));
     }
 
 }

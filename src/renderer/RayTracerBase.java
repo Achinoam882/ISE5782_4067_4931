@@ -1,7 +1,7 @@
 package renderer;
 import primitives.*;
 import scene.Scene;
-
+import geometries.Intersectable.GeoPoint;
 /**
  * An abstract base class responsible for tracking the ray
  *

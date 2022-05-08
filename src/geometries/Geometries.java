@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Geometries implements Intersectable
+public class Geometries extends Intersectable
 {
 
     private List<Intersectable>_intersectables ;
@@ -26,20 +26,21 @@ public class Geometries implements Intersectable
     public void add(Intersectable... geometries){
         _intersectables.addAll(List.of(geometries));
     }
-    @Override
-    public List<Point> findIntsersections(Ray ray){
-        List<Point> points = null;
-        if(_intersectables != null) {
-            for (Intersectable body: _intersectables) {
-                List<Point> result = body.findIntsersections(ray);
-                if(result != null){
-                    if(points == null)
-                        points = new LinkedList<Point>(result);
-                    else
-                        points.addAll(result);
-                }
-            }
+     @Override
+public List<GeoPoint> findGeoIntersectionsHelper(Ray ray){
+    if (_intersectables.isEmpty()) // In case the collection is empty
+        return null;
+
+    List<GeoPoint> points = null, result;
+    for (Intersectable body: _intersectables) {
+        result = body.findGeoIntersectionsHelper(ray);
+        if(result != null){
+            if(points == null)
+                points = new LinkedList<GeoPoint>(result);
+            else
+                points.addAll(result);
         }
-        return points;
     }
+    return points;
+}
 }

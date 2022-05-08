@@ -47,16 +47,16 @@ public class Point {
 
     public double distanceSquared(Point point)
     {
-        return ( (_xyz._d1-point._xyz._d1) * (_xyz._d1-point._xyz._d1) +
-                ((_xyz._d2-point._xyz._d2) * (_xyz._d2-point._xyz._d2) +
-                        (_xyz._d3-point._xyz._d3) * (_xyz._d3-point._xyz._d3)));
+        return ( (_xyz.d1-point._xyz.d1) * (_xyz.d1-point._xyz.d1) +
+                ((_xyz.d2-point._xyz.d2) * (_xyz.d2-point._xyz.d2) +
+                        (_xyz.d3-point._xyz.d3) * (_xyz.d3-point._xyz.d3)));
     }
     public double distance (Point point){
         return Math.sqrt(distanceSquared(point));
     }
 
     public double get_d1() {
-        return _xyz._d1;
+        return _xyz.d1;
     }
     /**public double get_d2() {
         return _xyz._d2;

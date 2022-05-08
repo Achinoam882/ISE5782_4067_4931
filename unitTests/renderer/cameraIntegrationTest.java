@@ -121,7 +121,7 @@ class cameraIntegrationTest {
         int counter = 0;
         for (Ray ray : rayList) // The loop checks intersections for each ray with the given shape
         {
-            List<Point> pointsList = shape.findIntsersections(ray);
+            List<Point> pointsList = shape.findIntersections(ray);
             if (pointsList != null)
                 counter += pointsList.size();
         }

@@ -11,7 +11,7 @@ import java.util.List;
 
 import static primitives.Util.isZero;
 
-public class Plane implements Geometry {
+public class Plane extends Geometry {
     final private Point _q0;
     final  private Vector _normal;
 
@@ -47,8 +47,10 @@ public class Plane implements Geometry {
                 throw new IllegalArgumentException("The points are on the same line");
             }
         }
+
+
     @Override
-    public List<Point> findIntsersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         // In case there are zeroes in denominator and numerator
         // For example when ray is parallel to the plane
         if (ray.getP0().equals(_q0) || isZero(this._normal.dotProduct(ray.getDir()))
@@ -60,23 +62,19 @@ public class Plane implements Geometry {
             return null;
 
         //In case there is intersection with the plane return the point
-        Point p = ray.getPoint(t);
-        LinkedList<Point> result = new LinkedList<Point>();
-        result.add(p);
-        return result;
+        var p = ray.getPoint(t);
+        LinkedList<GeoPoint> result = new LinkedList<GeoPoint>();
+
+                result.add(new GeoPoint(this,p)) ;
+                return result;
     }
-
-
-
 
     public Plane(Point p0, Vector normal) {
         _q0 = p0;
         _normal = normal.normalize();
     }
 
-    public Point get_q0() {
-        return _q0;
-    }
+
 
     @Override
     public String toString() {

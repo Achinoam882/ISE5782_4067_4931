@@ -20,28 +20,28 @@ class GeometriesTest {
 
         // TC01: Some of the Geometries are intersected
         Ray ray = new Ray(new Point(-1, 0, 0), new Vector(1, 1, 1));
-        assertEquals(3, collection.findIntsersections(ray).size()
+        assertEquals(3, collection.findIntersections(ray).size()
                 ,"Wrong number of intersection points"); // Intersects only plane and sphere
 
         // =============== Boundary Values Tests ==================
 
         // TC11: All the Geometries are intersected
         ray = new Ray(new Point(2, 2, 2.5), new Vector(-1, -1, -1));
-        assertEquals(4, collection.findIntsersections(ray).size()
+        assertEquals(4, collection.findIntersections(ray).size()
                 ,"Wrong number of intersection points");
 
         // TC12: No Geometries are intersected
         ray = new Ray(new Point(-1, 0, 0), new Vector(-1, -1, -1));
-        assertNull(collection.findIntsersections(ray),"No intersection points");
+        assertNull(collection.findIntersections(ray),"No intersection points");
 
         // TC13: Only one Geometry shape is intersected
         ray = new Ray(new Point(2, 0, 2), new Vector(-1, -1, -1));
-        assertEquals(1, collection.findIntsersections(ray).size()
+        assertEquals(1, collection.findIntersections(ray).size()
                 ,"Wrong number of intersection points");  // Intersects only plane
 
         // TC14: Empty Geometries collection
         collection = new Geometries();
-        assertNull(collection.findIntsersections(new Ray(new Point(-1, 0, 0),new Vector(1, 1, 0)))
+        assertNull(collection.findIntersections(new Ray(new Point(-1, 0, 0),new Vector(1, 1, 0)))
                 ,"No geometry shapes in the collection");
     }
 }
