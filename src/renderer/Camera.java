@@ -180,7 +180,7 @@ public class Camera {
      * This function renders image's pixel color map from the scene included with
      * the Renderer object
      */
-    public void renderImage() {
+    public Camera renderImage() {
         if (imageWriter == null)
             throw new MissingResourceException(RESOURCE_ERROR, RENDER_CLASS, IMAGE_WRITER_COMPONENT);
 
@@ -197,6 +197,7 @@ public class Camera {
 
             }
         }
+        return this;
     }
             /**
              * Create a grid [over the picture] in the pixel color map. given the grid's

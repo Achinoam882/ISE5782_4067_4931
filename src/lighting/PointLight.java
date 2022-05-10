@@ -15,23 +15,21 @@ public class PointLight extends Light implements LightSource{
      *
      * @param intensity
      * @param position
-     * @param c
-     * @param l
-     * @param q
+
      */
-    public PointLight(Color intensity, Point position, double c, double l, double q) {
+    public PointLight(Color intensity, Point position) {
         super(intensity);
         this.position = position;
-        kC = c;
-        kL = l;
-        kQ = q;
+        kC = 1;
+        kL = 0;
+        kQ = 0;
     }
 
      /**
       * ------------- setter -----------------
       *
       * @param kC the constant coefficient to set
-      * @return the {@link #PointLight(Color, Point, double, double, double)} itself
+      * @return the {@link #PointLight(Color, Point)} itself
       */
     public PointLight setKC(double kC){
         this.kC = kC;
@@ -42,7 +40,7 @@ public class PointLight extends Light implements LightSource{
       * ------------- setter -----------------
       *
       * @param kL the Linear coefficient to set
-      * @return the {@link #PointLight(Color, Point,double,double,double)} itself
+      * @return the {@link #PointLight(Color, Point)} itself
       */
     public PointLight setKL(double kL){
         this.kL = kL;
@@ -53,7 +51,7 @@ public class PointLight extends Light implements LightSource{
       * ------------- setter -----------------
       *
       * @param kQ the Quadratic coefficient to set
-      * @return the {@link #PointLight(Color, Point,double,double,double)} itself
+      * @return the {@link #PointLight(Color, Point)} itself
       */
     public PointLight setKQ(double kQ){
         this.kQ = kQ;
@@ -71,4 +69,10 @@ public class PointLight extends Light implements LightSource{
     public Vector getL(Point p) {
         return p.subtract(position).normalize();
     }
+
+     @Override
+     public double getDistance(Point point)
+     {
+          return position.distance(point);
+     }
 }

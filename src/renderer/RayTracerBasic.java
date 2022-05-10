@@ -7,6 +7,9 @@ import primitives.*;
 import static primitives.Util.*;
 import scene.Scene;
 import geometries.Intersectable.GeoPoint;
+
+import javax.swing.*;
+
 /**
  * basic ray trace heir from the rayTraceBase class the class is to calculate
  * the closest point to the ray from all the intersections and calculate the
@@ -14,6 +17,7 @@ import geometries.Intersectable.GeoPoint;
  *
  * @author David and Matan
  */
+
 public class RayTracerBasic extends RayTracerBase {
     /**
      * Ctor - get scene and set it
@@ -24,6 +28,37 @@ public class RayTracerBasic extends RayTracerBase {
     public RayTracerBasic(Scene scene) {
         super(scene);
     }
+    private static final double DELTA = 0.1;
+
+    /**
+     * For shading test between point and light source
+     *
+     * @param l     - vector from light
+     * @param n     - normal of body
+     * @param gp    - point in geometry body
+     * @return
+     *         <li>true - if unshaded
+     *         <li>false - if shaded
+     */
+    private boolean unshaded(GeoPoint gp, Vector l, Vector n, LightSource light,double nv)
+    {
+        Vector lightDirection =l.scale(-1);
+        Vector epsVector=n.scale(nv<0?DELTA:-1*DELTA);
+        Point point =gp.point.add(epsVector);
+        Ray lightRay=new Ray(point,lightDirection);
+        List<GeoPoint> intersections=scene.geometries.findGeoIntersections((lightRay));
+        if( intersections==null)
+            return true;
+        double lightDistance = light.getDistance(gp.point);//calculates the Distance between light and point
+        for (GeoPoint geoPoint : intersections) {
+            //checks if the point is behind light
+            if (geoPoint.point.distance(gp.point) <= lightDistance )
+                return false;//the point should be shaded
+        }
+        return true;//no shade
+
+    }
+
     /**
      * Implementation for the abstract method traceRay
      */
@@ -69,11 +104,16 @@ public class RayTracerBasic extends RayTracerBase {
         for (LightSource lightSource : scene.lights) {
             Vector l = lightSource.getL(intersection.point);
             double nl = alignZero(n.dotProduct(l));
-            if (nl * nv > 0) { // checks if nl == nv
-                Color lightIntensity = lightSource.getIntensity(intersection.point);
-                color = color.add(calcDiffusive(kd, l, n, lightIntensity),
-                        calcSpecular(ks, l, n, v, nShininess, lightIntensity));
+            if (nl * nv > 0) {// checks if nl == nv
+                if (unshaded(intersection, l, n,lightSource,nv)) {
+                    Color lightIntensity = lightSource.getIntensity(intersection.point);
+                    color = color.add(calcDiffusive(kd, l, n, lightIntensity),
+                            calcSpecular(ks, l, n, v, nShininess, lightIntensity));
+                }
+
+
             }
+
         }
         return color;
     }
