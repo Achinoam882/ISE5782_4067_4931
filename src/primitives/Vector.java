@@ -124,11 +124,7 @@ public class Vector extends Point {
     }
     public Vector scale(double scalingFacor)
     {
-        return new Vector(
-                new Double3(
-                        (scalingFacor * _xyz.d1),
-                        (scalingFacor * _xyz.d2),
-                       (scalingFacor * _xyz.d3)));
+        return new Vector(scalingFacor * _xyz.d1, scalingFacor * _xyz.d2, scalingFacor * _xyz.d3);
     }
 
 }

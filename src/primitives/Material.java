@@ -1,9 +1,32 @@
 package primitives;
 
 public class Material {
-    public Double3 kD = new Double3(0);
-    public Double3 kS = new Double3(0);
-    public int nShininess = 0;
+    /**
+     * represents transparency factor.
+     */
+    public Double3 kT;
+    /**
+     * represents reflection factor.
+     */
+    public Double3 kR;
+    /**
+     * represents diffuse factor.
+     */
+    public Double3 kD;
+    /**
+     * represents specular factor.
+     */
+    public Double3 kS;
+
+    public int nShininess;
+
+    public Material(){
+        kT = Double3.ZERO;
+        kR = Double3.ZERO;
+        kD = Double3.ZERO;
+        kS = Double3.ZERO;
+        nShininess = 0;
+    }
     /**
      * ------------- setter -----------------
      *
@@ -11,7 +34,8 @@ public class Material {
      * @return itself material
      */
     public Material setKd(double kD) {
-        return setKd(new Double3(kD));
+        this.kD = new Double3(kD);
+        return this;
     }
 
     /**
@@ -21,7 +45,8 @@ public class Material {
      * @return itself material
      */
     public Material setKs(double kS) {
-        return setKs(new Double3(kS));
+        this.kS = new Double3(kS);
+        return this;
     }
 
     /**
@@ -57,5 +82,34 @@ public class Material {
 
     }
 
+    /**
+     * ------------- setter -----------------
+     *
+     * @param kT the kT to set
+     * @return itself material
+     */
+    public Material setKt(Double3 kT) {
+        this.kT = kT;
+        return this;
+    }
+    public Material setKt(double kT) {
+        this.kT = new Double3(kT);
+        return this;
+    }
+    /**
+     * ------------- setter -----------------
+     *
+     * @param kR the kR to set
+     * @return itself material
+     */
+    public Material setKr(Double3 kR) {
+        this.kR = kR;
+        return this;
+    }
+
+    public Material setKr(double kR) {
+        this.kR = new Double3(kR);
+        return this;
+    }
 
 }

@@ -4,20 +4,38 @@
  *  * @author Achinoam & Malka
  */
 package primitives;
+
 import geometries.Intersectable.GeoPoint;
+
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 public class Ray {
    final Point p0;
     final Vector dir;
+    private static final double DELTA = 0.1;
+
 
     public Ray(Point p0, Vector dir) {
         this.p0 = p0;
         this.dir = dir.normalize();
+    }
+
+    public Ray(Point p0, Vector dir, Vector normal) {
+        this.dir = dir;
+        double nv = alignZero(normal.dotProduct(dir));
+        if (!isZero(nv)){
+            Vector moveVector = normal.scale(nv > 0 ? DELTA : -DELTA);
+            this.p0 = p0.add(moveVector);
+        }else{
+            this.p0 = p0;
+        }
+
+        //Vector delta = normal.scale(normal.dotProduct(dir) > 0 ? DELTA :  -DELTA);
+        //Point point = p0.add(delta);
     }
 
     public Point getP0() {

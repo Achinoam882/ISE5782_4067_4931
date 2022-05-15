@@ -142,4 +142,8 @@ public class Color {
         return new Color(rgb.d1 / k.d1, rgb.d2 / k.d2, rgb.d3 / k.d3);
     }
 
+    @Override
+    public String toString() {
+        return "rgb:" + rgb;
+    }
 }
