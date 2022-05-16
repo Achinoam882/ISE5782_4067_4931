@@ -58,7 +58,7 @@ public class RayTracerBasic extends RayTracerBase {
         double lightDistance = light.getDistance(gp.point);//calculates the Distance between light and point
         for (GeoPoint geoPoint : intersections) {
             //checks if the point is behind light
-            if (geoPoint.point.distance(gp.point) <= lightDistance){
+            if (geoPoint.point.distance(gp.point) <= lightDistance &&  geoPoint.geometry.getMaterial().kT.equals(new Double3(0.0))){
                 return false;//the point should be shaded
             }
         }
