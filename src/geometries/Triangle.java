@@ -62,4 +62,8 @@ public class Triangle extends Polygon {
         } else
             return null;    //If the scalars are in a different sign
     }
+    @Override
+    public void setBox() {
+        super.setBox();
+    }
 }

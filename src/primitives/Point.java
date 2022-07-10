@@ -44,7 +44,29 @@ public class Point {
     }
 
 
+    /**
+     * get func for coordinate x
+     * @return coordinate x
+     */
+    public double getX(){
+        return _xyz.d1;
+    }
 
+    /**
+     * get func for coordinate y
+     * @return coordinate y
+     */
+    public double getY(){
+        return _xyz.d2;
+    }
+
+    /**
+     * get func for coordinate z
+     * @return coordinate z
+     */
+    public double getZ(){
+        return _xyz.d3;
+    }
     public double distanceSquared(Point point)
     {
         return ( (_xyz.d1-point._xyz.d1) * (_xyz.d1-point._xyz.d1) +

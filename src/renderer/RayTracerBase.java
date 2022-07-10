@@ -2,6 +2,9 @@ package renderer;
 import primitives.*;
 import scene.Scene;
 import geometries.Intersectable.GeoPoint;
+
+import java.util.List;
+
 /**
  * An abstract base class responsible for tracking the ray
  *
@@ -21,9 +24,11 @@ public abstract class RayTracerBase {
     /**
      * returns color of pixel in current tracing ray
      *
-     * @param ray - ray on tracing
+     * @param rays - ray on tracing
      * @return the color of pixel in current tracing ray
      */
    /* public abstract Color traceRay(Ray ray);*/
+    public abstract Color traceRays(List<Ray> rays);
+
     public abstract Color traceRay(Ray ray);
 }

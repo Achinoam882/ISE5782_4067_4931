@@ -27,12 +27,22 @@ public class Camera {
     private double distance;
     private ImageWriter imageWriter;
     private RayTracerBase tracer;
+    private double focalDistance = 0.0;
+    private double apertureRadius = 1.0;
+    private static final int LEVEL = 4;
+    private int amountRowPixels;
+    private int amountColumnPixels;
 
     /**
      * Location of the camera lens
      *
      * @return the p0 a location of the camera lens
      */
+    public Camera setPixels(int amountRowPixels, int amountColumnPixels) {
+        this.amountRowPixels = amountRowPixels;
+        this.amountColumnPixels = amountColumnPixels;
+        return this;
+    }
     public Point getP0() {
         return p0;
     }
@@ -44,6 +54,18 @@ public class Camera {
      */
     public Vector getvUp() {
         return vUp;
+    }
+    /**
+     * @return the distance
+     */
+    public double getDistance() {
+        return distance;
+    }
+    public double getwidth() {
+        return width;
+    }
+    public double getheight() {
+        return height;
     }
 
     /**
@@ -104,6 +126,9 @@ public class Camera {
         this.distance = distance;
         return this;
     }
+    public Ray buildRay(Point p){
+        return new Ray(p0, p.subtract(p0));
+    }
 
     /**
      * Calculates a ray through each of the pixels on the view plane
@@ -139,12 +164,63 @@ public class Camera {
         return new Ray(p0, vIJ);
 
     }
+    /**
+     * Calculates list of rays through each of the pixels on the view plane
+     *
+     * @param nX number of pixels in X axis
+     * @param nY number of pixels in Y axis
+     * @param j  the column index (With i define a specific pixel)
+     * @param i  the row index (With j define a specific pixel)
+     * @return list of rays object which is the ray through a specific index
+     */
+    public List<Ray> constructRays(int nX, int nY, int j, int i) {
+        if (amountColumnPixels <= 0 || amountRowPixels <= 0) {
+            return List.of(constructRay(nX, nY, j, i));
+        }
+        Point Pc = p0.add(vTo.scale(distance));
+        List<Ray> rays = new LinkedList<>();
+//ratio
+        double Ry = height / nY;
+        double Rx = width / nX;
+        double Yi = -(i - (nY - 1) / 2d) * Ry;
+        double Xj = (j - (nX - 1) / 2d) * Rx;
+//Pixel[i,j]center:
+        Point Pij = Pc;
+        if ((Yi)!=0) {
+            Pij = Pij.add(vUp.scale(Yi));
+        }
+        if ((Xj)!=0) {
+            Pij = Pij.add(vRight.scale(Xj));
+        }
+        Ry = Ry / amountColumnPixels;
+        Rx = Rx / amountRowPixels;
+        for (int k = 0; k < amountRowPixels; k++) {
+            for (int l = 0; l < amountColumnPixels; l++) {
 
+                Point point = Pij;
+                double Yii = -(k -
+                        (amountColumnPixels - 1) / 2d) *
+                        Ry;
+                double Xjj = -(l -
+                        (amountRowPixels - 1) / 2d) * Rx;
+                if ((Yii)!=0) {
+                    point = point.add(vUp.scale(Yii
+                    ));
+                }
+                if ((Xjj)!=0) {
+                    point = point.add(vRight.scale(
+                            Xjj));
+                }
+                rays.add(new Ray(p0, point.subtract(p0)));
+            }
+        }
+        return rays;
+    }
     /**
      * Image writer setter
      *
      * @param imgWriter the image writer to set
-     * @return camera itself - for chaining
+     * @return camera itself
      */
     public Camera setImageWriter(ImageWriter imgWriter) {
         this.imageWriter = imgWriter;
@@ -155,26 +231,18 @@ public class Camera {
      * Ray tracer setter
      *
      * @param tracer to use
-     * @return camera itself - for chaining
+     * @return camera itself
      */
     public Camera setRayTracer(RayTracerBase tracer) {
         this.tracer = tracer;
         return this;
     }
-    /**
-     * Cast ray from camera in order to color a pixel
-     * @param nX resolution on X axis (number of pixels in row)
-     * @param nY resolution on Y axis (number of pixels in column)
-     * @param col pixel's column number (pixel index in row)
-     * @param row pixel's row number (pixel index in column)
-     */
-    private Color castRay(int nX, int nY, int col, int row) {
 
-        Ray ray = constructRay(nX, nY, col, row);
-        Color pixelColor = tracer.traceRay(ray);
-        return pixelColor;
 
-    }
+
+
+
+
 
     /**
      * This function renders image's pixel color map from the scene included with
@@ -191,13 +259,38 @@ public class Camera {
         int nY = imageWriter.getNy();
         for (int i = 0; i < nY; i++) {
             for (int j = 0; j < nX; j++) {
-                Color pixelColor=castRay(nX, nY, j, i);
-                imageWriter.writePixel(j, i, pixelColor);
+                        castRay(nX, nY, j, i);
+
 
 
             }
         }
         return this;
+    }
+    /**
+     * This function renders image's pixel color map from the scene included with
+     * the Renderer object - with multi-threading
+     */
+    public void renderImageWithTreads() {
+        // In case that not all of the fields are filled
+        if (imageWriter == null || tracer == null)
+            throw new MissingResourceException("Missing", "resource", "exception");
+
+        // The nested loop finds and creates a ray for each pixels, finds its color and
+        // writes it to the image pixles
+        int nY = this.imageWriter.getNy();
+        int nX = this.imageWriter.getNx();
+
+        double printInterval = 0.01;
+        int threadsCount = 3;
+        Pixel.initialize(nY, nX, printInterval);
+        while (threadsCount-- > 0) {
+            new Thread(() -> {
+                for (Pixel pixel = new Pixel(); pixel.nextPixel(); Pixel.pixelDone())
+                    castRay(nX, nY, pixel.col, pixel.row);
+            }).start();
+        }
+        Pixel.waitToFinish();
     }
             /**
              * Create a grid [over the picture] in the pixel color map. given the grid's
@@ -229,5 +322,72 @@ public class Camera {
 
                 imageWriter.writeToImage();
             }
-        }
+    /**
+     * set Aperture Radius to affect on depth of field
+     * (builder design pattern)
+     *
+     * @param apertureRadius
+     * @return this camera object
+     */
+    public Camera setApertureRadius(double apertureRadius) {
+        this.apertureRadius = apertureRadius;
+        return this;
+    }
+
+
+    /**
+     * set distance of Focal plane from View Plan
+     * (builder design pattern)
+     *
+     * @param focalDistance
+     * @return this camera object
+     */
+    public Camera setFpDistance(double focalDistance) {
+        this.focalDistance = focalDistance;
+        return this;
+    }
+
+    /**
+     * get distance of Focal plan from View Plan
+     *
+     * @return distance from view plan
+     */
+    public double getFpDistance() {
+        return focalDistance;
+    }
+
+    /**
+     * get radius of Aperture Radius
+     *
+     * @return radius
+     */
+    public double getApertureRadius() {
+        return apertureRadius;
+    }
+
+    public Point calcPij(double width,double height,int nX, int nY, int j, int i,Point pCenter) {
+        double Ry = height / nY;
+        double Rx = width / nX;
+        double yi = -(double)(i - ((nY - 1) /(double)2)) * Ry;
+        double xj = (double)(j - (nX - 1) /(double)2) * Rx;
+        Point pIJ = pCenter;
+        if (xj != 0) pIJ = pIJ.add(getvRight().scale(xj));
+        if (yi != 0) pIJ = pIJ.add(getvUp().scale(yi));
+        return pIJ;
+    }
+    public Point getPCenter() { return p0.add(vTo.scale(distance));}
+    /**
+     * Cast ray from camera in order to color a pixel
+     * @param nX resolution on X axis (number of pixels in row)
+     * @param nY resolution on Y axis (number of pixels in column)
+     * @param j pixel's column number (pixel index in row)
+            * @param i pixel's row number (pixel index in column)
+     * */
+    private void castRay(int nX, int nY, int i, int j) {
+        List<Ray> rays = constructRays(nX, nY, i, j);
+        Color pixelColor = tracer.traceRays(rays);
+
+        imageWriter.writePixel(i, j, pixelColor);
+    }
+}
 

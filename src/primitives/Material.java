@@ -2,6 +2,21 @@ package primitives;
 
 public class Material {
     /**
+     * Constructor for material
+     * @param _kD Diffusion factor of material
+     * @param _kS Specular factor of material
+     * @param _nShininess Shininess level of material
+     * @param _kT Transparency factor of material
+     * @param _kR Reflectance factor of material
+     */
+    public Material(Double3 _kD, Double3 _kS,int _nShininess,Double3 _kT,Double3 _kR) {
+        this.kD = _kD;
+        this.kS = _kS;
+        this.kT=_kT;
+        this.kR=_kR;
+        this.nShininess = _nShininess;
+    }
+    /**
      * represents transparency factor.
      */
     public Double3 kT;

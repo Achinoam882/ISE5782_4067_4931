@@ -52,6 +52,11 @@ public class Scene {
         this.background = background;
         return this;
     }
+
+    public Color getBackground() {
+        return background;
+    }
+
     /**
      * ------------- setter -----------------
      *

@@ -11,6 +11,8 @@ import java.util.Objects;
  * that intersect with a specific Ray {@link primitives.Ray}
  */
 public abstract class Intersectable {
+    public Box box;
+
     /**
      * find all intersection points {@link Point}
      * that intersect the Shape from a specific Ray {@link Ray}
@@ -84,5 +86,9 @@ public abstract class Intersectable {
      * @return list of the intersection points
      */
     protected abstract   List<GeoPoint> findGeoIntersectionsHelper(Ray ray);
+    /**
+     * Abstract method for creating box for each geometry
+     */
+    public abstract void setBox();
 
 }

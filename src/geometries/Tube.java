@@ -68,5 +68,8 @@ public class Tube extends Geometry{
     public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         return null;
     }
+    @Override
+    public void setBox() {
+    }
 
 }

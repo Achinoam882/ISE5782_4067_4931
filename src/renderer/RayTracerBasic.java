@@ -14,7 +14,7 @@ import static primitives.Util.alignZero;
  * the closest point to the ray from all the intersections and calculate the
  * color in this point
  *
- * @author David and Matan
+ * @author Malka and Achinoam
  */
 
 public class RayTracerBasic extends RayTracerBase {
@@ -34,41 +34,11 @@ public class RayTracerBasic extends RayTracerBase {
 
 
 
-    /**
-     * For shading test between point and light source
-     *
-     * @param dirLight     - vector from light
-     * @param normal     - normal of body
-     * @param gp    - point in geometry body
-     * @return
-     *         <li>true - if unshaded
-     *         <li>false - if shaded
-    private boolean unshaded(LightSource light, Vector dirLight, Vector normal, GeoPoint gp) {
-        Vector lightDirection = dirLight.scale(-1);
-        // Vector epsVector=normal.scale(nv<0?DELTA:-1*DELTA);
-        // Point point =gp.point.add(epsVector);
-        Vector delta = normal.scale(normal.dotProduct(lightDirection) > 0 ? DELTA : -DELTA);
-        Point point = gp.point.add(delta);
-        Ray lightRay = new Ray(point, lightDirection);
-        List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay);
-        if (intersections == null){
-            return true;
-        }// && gp.geometry.getMaterial().kT.equals(new Double3(0.0))
-        double lightDistance = light.getDistance(gp.point);//calculates the Distance between light and point
-        for (GeoPoint geoPoint : intersections) {
-            //checks if the point is behind light
-            if (geoPoint.point.distance(gp.point) <= lightDistance &&  geoPoint.geometry.getMaterial().kT.equals(new Double3(0.0))){
-                return false;//the point should be shaded
-            }
-        }
-        return true;//no shade
 
-    }
-    */
 
-    /**
-     * Implementation for the abstract method traceRay
-     */
+
+
+
     @Override
     public  Color traceRay(Ray ray) {
         GeoPoint closestPoint = findClosestIntersection(ray);
@@ -78,11 +48,31 @@ public class RayTracerBasic extends RayTracerBase {
         }
         return color;
     }
+
+    /**
+     * Implementation for the abstract method traceRay
+     */
+    @Override
+    public Color traceRays(List<Ray>rays){
+        Color sumColor=Color.BLACK;
+
+        for(Ray ray:rays){
+            GeoPoint closestPoint=findClosestIntersection(ray);
+            if(closestPoint!=null){
+                sumColor=sumColor.add(calcColor(closestPoint,ray));
+
+            }else{
+                sumColor=sumColor.add(scene.getBackground()
+                );
+            }
+        }
+        return sumColor.reduce(rays.size());
+    }
     /**
      * Calculate the color of a certain point
      *
      * @param intersection
-     * @return The color of the point (calculated with local effects)
+     * @return The color of the point (calculated with local and global effects)
      */
         public Color calcColor(GeoPoint intersection, Ray ray, int level, Double3 k) {
             if (intersection == null) {
@@ -110,19 +100,18 @@ public class RayTracerBasic extends RayTracerBase {
      * @param
      * @param level
      * @param k
-     * @return
+     * @return The color with the global effects
      */
     private Color calcGlobalEffects(GeoPoint geoPoint, Ray ray, int level, Double3 k) {
         Color color = Color.BLACK;
 
         Vector normal = geoPoint.geometry.getNormal(geoPoint.point);
-        //double vn = alignZero(normal.dotProduct(v));
         Material material = geoPoint.geometry.getMaterial();
         Double3 kr = k.product(material.kR);
         //Conditions for stopping a recursive function, by The contribution of light to a point.
         //if the effect of light on the point color is minimal then stop with the recursion
         if (!kr.lowerThan(MIN_CALC_COLOR_K)) {
-            Ray reflectedRay = calcRayReflection(normal, geoPoint.point, ray);
+            Ray reflectedRay = calcRayReflection(normal, geoPoint.point, ray);//creating reflectedRay
             GeoPoint reflectedPoint = findClosestIntersection(reflectedRay);
             if (reflectedPoint != null){
                 color = color.add(calcColor(reflectedPoint, reflectedRay, level - 1, kr).scale(material.kR));
@@ -140,8 +129,9 @@ public class RayTracerBasic extends RayTracerBase {
         }
         return color;
     }
+
             /**
-             * Calculate the effects of lights
+             * Calculate the effects of lights in a certain point on object
              *
              * @param intersection
              * @param ray
@@ -298,8 +288,16 @@ public class RayTracerBasic extends RayTracerBase {
                     }
                     return ray.findClosestGeoPoint(intersections);//find closest intersection geo point
                 }
+    /**
+     * Function that creates boxes for each geometry (for on/off switch)
+     * @return This
+     */
+    public RayTracerBasic turnAllBoxesOn() {
+        scene.geometries.setBox();
+        return this;
+    }
 
-            }
+}
 
 
 

@@ -95,5 +95,31 @@ public class Plane extends Geometry {
     }
     public Vector getNormal() {return _normal;}
 
+    /**
+     * create box for a plan
+     */
+    @Override
+    public void setBox() {
+        double pInfinite = Double.POSITIVE_INFINITY;
+        double nInfinite = Double.NEGATIVE_INFINITY;
+        //Initializing axis vectors
+        Vector nX = new Vector(1, 0, 0);
+        Vector nY = new Vector(0, 1, 0);
+        Vector nZ = new Vector(0, 0, 1);
 
+        //In case on of the axis is vertical to the plan,
+        //so the max and min point of this axis is the q0 in the point
+        if (nX.equals(_normal) || nX.scale(-1).equals(_normal)) {
+            box = new Box(_q0.getX(), pInfinite, pInfinite, _q0.getX(), nInfinite, nInfinite);
+        }
+        else if (nY.equals(_normal) || nY.scale(-1).equals(_normal)) {
+            box = new Box(pInfinite, _q0.getY(), pInfinite, nInfinite, _q0.getY(), nInfinite);
+        }
+
+        else if (nZ.equals(_normal) || nZ.scale(-1).equals(_normal)) {
+            box = new Box(pInfinite, pInfinite, _q0.getZ(), nInfinite, nInfinite, _q0.getZ());
+        }
+        else
+            box = new Box(pInfinite, pInfinite, pInfinite, nInfinite, nInfinite, nInfinite);
+    }
 }
