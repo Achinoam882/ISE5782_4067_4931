@@ -35,10 +35,6 @@ public class RayTracerBasic extends RayTracerBase {
 
 
 
-
-
-
-
     @Override
     public  Color traceRay(Ray ray) {
         GeoPoint closestPoint = findClosestIntersection(ray);
@@ -213,10 +209,6 @@ public class RayTracerBasic extends RayTracerBase {
                     Vector dir = ray.getDir();
                     Vector normalDir = normal.scale(-2 * dir.dotProduct(normal));
                     Vector result = dir.add(normalDir);
-                    //double nv = normal.dotProduct(dir);
-                    // Vector result = normal.scale(nv * 2).subtract(dir);
-                    //Vector result = dir.subtract(normal.scale(alignZero(2 * (normal.dotProduct(dir)))));
-
                     return new Ray(point, result, normal);
                     // Vector result = dir.subtract(normal.scale(-2 * nv)).normalize();
                     // return new Ray(point, result);
@@ -260,8 +252,6 @@ public class RayTracerBasic extends RayTracerBase {
                         return ktr;
                     for (GeoPoint geopoint : intersections) {
                         if(alignZero(geopoint.point.distance(gp.point)-lightDistance)<=0){
-                       // if (geopoint.point.distance(gp.point) <= lightDistance &&  geopoint.geometry.getMaterial().kT.equals(new Double3(0.0))){
-                         // var  kt = ktr.product(geopoint.geometry.getMaterial().kT);
                           var kt=geopoint.geometry.getMaterial().kT;
                             ktr=kt.product(ktr);
                             if (ktr.lowerThan(MIN_CALC_COLOR_K))
